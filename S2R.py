@@ -8,9 +8,9 @@ import scipy.signal as signal
 import matplotlib.pyplot as plt
 from utils import *
 
-def S2R(frame_dir, frame_num):
+def S2R(frame_dir, frame_num=0):
 
-	frame_files = glob.glob(frame_dir+"*.png")
+	frame_files = glob.glob(frame_dir+"/*.png")
 	if frame_num == 0:
 		frame_num = len(frame_files)
 	print("Number of frames to process: "+str(frame_num))
@@ -93,7 +93,7 @@ def main():
 	parser.add_argument("--frame_num", type=int, default=0, help="How many frames to process")
 	args = parser.parse_args()
 	
-	frame_dir = "/Users/sherry/data_temp/01_01_01_C/"
+	frame_dir = "/Users/sherry/data_temp/01_01_01_C"
 	# frame_dir = "./data/images/"
 	p_blocked = S2R(frame_dir, args.frame_num)
 	
