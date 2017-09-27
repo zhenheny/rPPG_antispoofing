@@ -58,7 +58,7 @@ import glob
 import numpy as np
 from skimage import io
 
-if len(sys.argv) != 3:
+if len(sys.argv) != 2:
     print(
         "Give the path to the trained shape predictor model as the first "
         "argument and then the directory containing the facial images.\n"
@@ -77,9 +77,9 @@ detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(predictor_path)
 # win = dlib.image_window()
 
-for f in glob.glob(os.path.join(faces_folder_path, "*.png")):
+for f in glob.glob(faces_folder_path+"*_C"):
     print("Processing file: {}".format(f))
-    img = io.imread(f)
+    img = io.imread(f+"/000.png")
     # win.clear_overlay()
     # win.set_image(img)
 
@@ -98,10 +98,10 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.png")):
     img = img[:,:,[2,1,0]].copy()
     for k, d in enumerate(dets):
         cv2.rectangle(img, (int(d.left()),int(d.top())),(int(d.right()),int(d.bottom())),(0,0,255),2)
-        cv2.imwrite(save_path+f.split("/")[-2]+"_"+f.split("/")[-1])
+        cv2.imwrite(save_path+f.split("/")[-1]+".png", img)
 
         # Draw the face landmarks on the screen.
     # #     win.add_overlay(shape)
 
     # # win.add_overlay(dets)
-    dlib.hit_enter_to_continue()
+    # dlib.hit_enter_to_continue()
