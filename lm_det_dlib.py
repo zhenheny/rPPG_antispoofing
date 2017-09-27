@@ -69,8 +69,9 @@ if len(sys.argv) != 3:
         "    http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2")
     exit()
 
-predictor_path = sys.argv[1]
-faces_folder_path = sys.argv[2]
+predictor_path = "/home/zhenheng/works/antispoofing/rPPG/face_det_model/shape_predictor_68_face_landmarks.dat"
+faces_folder_path = sys.argv[1]
+save_path = "/home/zhenheng/datasets/3dmad/fd_results/"
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(predictor_path)
@@ -97,8 +98,7 @@ for f in glob.glob(os.path.join(faces_folder_path, "*.png")):
     img = img[:,:,[2,1,0]].copy()
     for k, d in enumerate(dets):
         cv2.rectangle(img, (int(d.left()),int(d.top())),(int(d.right()),int(d.bottom())),(0,0,255),2)
-    cv2.imshow('1',img)
-    cv2.waitKey()
+        cv2.imwrite(save_path+f.split("/")[-2]+"_"+f.split("/")[-1])
 
         # Draw the face landmarks on the screen.
     # #     win.add_overlay(shape)
