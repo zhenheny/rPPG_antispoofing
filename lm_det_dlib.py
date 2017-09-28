@@ -76,8 +76,11 @@ save_path = "/home/zhenheng/datasets/3dmad/fd_results/"
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(predictor_path)
 # win = dlib.image_window()
-
+if not os.path.exists(faces_folder_path+"fcrop/"):
+    os.mkdir(faces_folder_path+"fcrop/")
 for f in glob.glob(faces_folder_path+"*_C"):
+    if not os.path.exists(faces_folder_path+"fcrop/"+f.split("/")[-1]):
+        os.mkdir(faces_folder_path+"fcrop/"+f.split("/")[-1])
     print("Processing file: {}".format(f))
     img = io.imread(f+"/000.png")
     # win.clear_overlay()
@@ -95,10 +98,15 @@ for f in glob.glob(faces_folder_path+"*_C"):
         shape = predictor(img, d)
         print("Part 0: {}, Part 1: {} ...".format(shape.part(0),
                                                   shape.part(1)))
-    img = img[:,:,[2,1,0]].copy()
-    for k, d in enumerate(dets):
-        cv2.rectangle(img, (int(d.left()),int(d.top())),(int(d.right()),int(d.bottom())),(0,0,255),2)
-        cv2.imwrite(save_path+f.split("/")[-1]+".png", img)
+    for img_fn in glob.glob(f+"/*.png"):
+        img = io.imread(img_fn)
+        for k, d in enumerate(dets):
+            crop_img = img[int(0.87*d.top()):int(d.bottom()),int(d.left()):int(d.right()),:]
+        cv2.imwrite(faces_folder_path+"fcrop/"+f.split("/")[-1]+"/"+img_fn.split("/")[-1], crop_img[:,:,[2,1,0]])
+    # img = img[:,:,[2,1,0]].copy()
+    # for k, d in enumerate(dets):
+    #     cv2.rectangle(img, (int(d.left()),int(d.top())),(int(d.right()),int(d.bottom())),(0,0,255),2)
+    #     cv2.imwrite(save_path+f.split("/")[-1]+".png", img)
 
         # Draw the face landmarks on the screen.
     # #     win.add_overlay(shape)

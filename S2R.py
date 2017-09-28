@@ -11,6 +11,7 @@ from utils import *
 def S2R(frame_dir, frame_num=0):
 
 	frame_files = glob.glob(frame_dir+"/*.png")
+	frame_files.sort()
 	if frame_num == 0:
 		frame_num = len(frame_files)
 	print("Number of frames to process: "+str(frame_num))
